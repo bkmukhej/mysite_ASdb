@@ -1,0 +1,57 @@
+<title>Charts</title>
+<div>
+    <h1>List of Categories</h1>
+</div>
+
+<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+
+<div class="date picker">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script>
+    $(function() {
+        $( "#start_datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+        $( "#end_datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    $(document).on("click", ".restore", function(){
+    var one = $("input#start_datepicker");
+    var two = $("input#end_datepicker");
+    one.val(one.data("original-value"));
+    two.val(two.data("original-value"));
+    });
+    </script>
+</div>
+
+<form method="POST">{% csrf_token %}
+    <p><br>Start Date: <input type="text" id="start_datepicker" name="start_date" value="{{ start_date }}" data-original-value=""></br>
+    <br>End Date: <input type="text" id="end_datepicker" name="end_date" value="{{ end_date }}" data-original-value=""></br></p>
+    <br><input type="hidden" name="context_category" value = {{ context_category }}></br>
+    <br><input type="submit" class="save btn btn-default" name="input" value="Filter"><a href="#" class="restore">Reset</a></br>
+    </p>
+    {% for category in data %}
+        <input type="submit" class="save btn btn-default" name="input" value={{ category.seo_name }}>
+    {% endfor %}
+</form>
+<div width="100%">
+    <h2>Sales by Volume</h2>
+    <div id="{{ chart_volume.get_html_id }}" style="width: {{ chart_volume.width }}px; height: {{ chart_volume.height }}px;"></div>
+    <h2>Sales by Value</h2>
+    <div id="{{ chart_value.get_html_id }}" style="width: {{ chart_value.width }}px; height: {{ chart_value.height }}px;"></div>
+</div>
+<script type="text/javascript">
+Morris.Donut({
+element: '{{ chart_volume.get_html_id }}',
+data: {{ chart_volume.get_data_json|safe }}
+});
+</script>
+<script>
+Morris.Donut({
+element: '{{ chart_value.get_html_id }}',
+data: {{ chart_value.get_data_json|safe }}
+});
+</script>

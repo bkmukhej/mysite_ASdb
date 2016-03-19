@@ -1,0 +1,29 @@
+<title>Charts</title>
+<div>
+    <h1>Choose a Time Frame</h1>
+</div>
+
+<div class="datepicker" id="datepicker">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/resources/demos/style.css">
+    <script>
+    $(function() {
+        $( "#start_datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+        $( "#end_datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+</div>
+
+<form method="POST" action="{%url 'chart_view'%}">{% csrf_token %}
+    <p><br>Start Date: <input type="text" id="start_datepicker" name="start_date"></br>
+    <br>End Date: <input type="text" id="end_datepicker" name="end_date"></br>
+    <br><input type="submit" class="save btn btn-default" value="Get Charts"></p>
+    <br><input type="hidden" class="save btn btn-default" name="input" value={{ context_category }}></p>
+</form>
+<div>
+    {% for id in data %}
+        {{ id }}
+    {% endfor %}
+</div>
